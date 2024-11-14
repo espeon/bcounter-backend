@@ -17,4 +17,4 @@ ENV DENO_ENV=production
 EXPOSE 8000
 
 # Command to run your script
-CMD ["run", "--allow-net", "--allow-read", "--allow-write", "--unstable-kv", "index.ts"]
+CMD ["run", "--allow-net", "--allow-read", "--allow-write", "--unstable-kv", "--unstable-cron", "index.ts"]
