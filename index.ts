@@ -1,6 +1,6 @@
-import { Router, routes } from "./router.ts";
+import { Router, routes } from "./router/router.ts";
 
-const kv = await Deno.openKv();
+const kv = await globalThis.Deno.openKv();
 const CACHE_KEY = ["bsky-stats.cache"];
 const CACHE_DURATION = 60000; // 1 minute in milliseconds
 
@@ -40,7 +40,7 @@ async function fetchAndProcessStats(lastCache: any = null) {
   };
 }
 
-Deno.serve(async (req: Request) => {
+globalThis.Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("", { status: 200, headers: cors });
   }
