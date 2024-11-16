@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { Hono, Context, Next } from 'hono'
 import { DailyDatum, Stats } from "./types/stats.ts";
 import { Cache } from "./types/cache.ts";
 
@@ -15,7 +15,7 @@ const corsHeaders = {
   'access-control-allow-headers': '*',
 };
 
-app.use('*', async (c, next) => {
+app.use('*', async (c: Context, next: Next) => {
   await next();
   Object.entries(corsHeaders).forEach(([key, value]) => c.header(key, value));
 });
@@ -93,7 +93,7 @@ async function setCache<T>(key: string[], data: T): Promise<void> {
   await kv.set(key, data);
 }
 
-app.get('/', async (c) => {
+app.get('/', async (c: Context ) => {
   const cachedData = await getCache<Cache>(CACHE_KEY);
 
   if (cachedData && new Date(cachedData.next_update_time).getTime() > Date.now()) {
@@ -107,7 +107,7 @@ app.get('/', async (c) => {
   return c.json(response);
 });
 
-app.get('/daily', async (c) => {
+app.get('/daily', async (c: Context ) => {
   const dailyData = await getCache<DailyDatum[]>(DAILY_DATA_KEY) || [];
   return c.json(dailyData);
 });
